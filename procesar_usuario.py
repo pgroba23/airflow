@@ -1,9 +1,9 @@
-from airflow.models import DAG
-from airflow.providers.sqlite.operators.sqlite import SqliteOperator
-from airflow.providers.http.sensors.http import HttpSensor
-from airflow.providers.http.operators.http import SimpleHttpOperator
-from airflow.operators.python import PythonOperator
-from airflow.operators.bash import BashOperator
+from airflow import DAG
+from airflow.operators.sqlite_operator import SqliteOperator
+from airflow.sensors.http_sensor import HttpSensor
+from airflow.operators.http_operator import SimpleHttpOperator
+from airflow.operators.python_operator import PythonOperator
+from airflow.operators.bash_operator import BashOperator
 
 from datetime import datetime
 from pandas import json_normalize
