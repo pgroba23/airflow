@@ -6,7 +6,8 @@ from airflow.operators.python_operator import PythonOperator
 from airflow.operators.bash_operator import BashOperator
 
 from datetime import datetime
-from pandas import json_normalize
+#from pandas import json_normalize
+from pandas.io.json import json_normalize
 import json
 
 default_args={
