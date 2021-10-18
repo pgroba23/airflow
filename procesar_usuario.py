@@ -1,5 +1,6 @@
 from airflow import DAG
-from airflow.operators.sqlite_operator import SqliteOperator
+#from airflow.operators.sqlite_operator import SqliteOperator
+from airflow.operators.postgres_operator import PostgresOperator
 from airflow.sensors.http_sensor import HttpSensor
 from airflow.operators.http_operator import SimpleHttpOperator
 from airflow.operators.python_operator import PythonOperator
@@ -36,9 +37,9 @@ default_args=default_args,
 catchup=False) as dag:
 
 #Definir tareas
-    crear_tabla = SqliteOperator(
+    crear_tabla = PostgresOperator(
        task_id='crear_tabla',
-       sqlite_conn_id='db_sqlite',
+       postgres_conn_id='postgres_db',
        sql='''
            CREATE TABLE IF NOT EXISTS usuarios(
            nombre TEXT NOT NULL,
@@ -76,4 +77,5 @@ catchup=False) as dag:
         bash_command = 'echo -e ".separator ","\n.import /tmp/usuario_procesado.csv usuarios" | sqlite3 airflow.db'
     )
 
-    crear_tabla >> api_disponible >> extraer_usuario >> procesa_usuario >> almacenar_usuario
+    #crear_tabla >> api_disponible >> extraer_usuario >> procesa_usuario >> almacenar_usuario
+crear_tabla
