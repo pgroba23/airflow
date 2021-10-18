@@ -12,7 +12,7 @@ from pandas.io.json import json_normalize
 import json
 
 default_args={
-    'start_date': datetime(2021,1,1)
+    'start_date': datetime(2021,10,16)
 }
 #ti=task instance
 def _procesa_usuario(ti):
@@ -74,8 +74,9 @@ catchup=False) as dag:
 #sqlite3 no va a andar falta ruta
     almacenar_usuario = BashOperator(
         task_id='almacenar_usuario',
-        bash_command = 'echo -e ".separator ","\n.import /tmp/usuario_procesado.csv usuarios" | sqlite3 airflow.db'
+        #bash_command = 'echo -e ".separator ","\n.import /tmp/usuario_procesado.csv usuarios" | sqlite3 airflow.db'
+        bash_command = 'cp /tmp/usuario_procesado.csv /home/pgroba/airflow/results'
     )
 
-    #crear_tabla >> api_disponible >> extraer_usuario >> procesa_usuario >> almacenar_usuario
-crear_tabla
+    crear_tabla >> api_disponible >> extraer_usuario >> procesa_usuario >> almacenar_usuario
+
