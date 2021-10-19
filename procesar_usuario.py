@@ -15,8 +15,10 @@ default_args={
     'start_date': datetime(2021,10,16)
 }
 #ti=task instance
-def _procesa_usuario(ti):
+def _procesa_usuario(**kwargs):
+    ti = kwargs['ti']
     usuarios = ti.xcom_pull(task_ids=['extraer_usuario'])
+    print(usuarios)
     if not len(usuarios) or 'results' not in usuarios[0]:
         raise ValueError('Usuario vacio')
     usuario = usuarios[0]['results'][0]
@@ -64,11 +66,13 @@ catchup=False) as dag:
         endpoint='api/',
         method='GET',
         response_filter=lambda response: json.loads(response.text),
-        log_response=True
+        log_response=True,
+        xcom_push=True
     )
 
     procesa_usuario = PythonOperator(
         task_id='procesa_usuario',
+        provide_context=True,
         python_callable=_procesa_usuario
     )
 #sqlite3 no va a andar falta ruta
@@ -79,4 +83,3 @@ catchup=False) as dag:
     )
 
     crear_tabla >> api_disponible >> extraer_usuario >> procesa_usuario >> almacenar_usuario
-
